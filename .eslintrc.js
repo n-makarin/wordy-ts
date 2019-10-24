@@ -9,7 +9,9 @@ module.exports = {
   },
   extends: [
     '@nuxtjs',
-    'plugin:nuxt/recommended'
+    'plugin:nuxt/recommended',
+    // typescript config
+    '@nuxtjs/eslint-config-typescript'
   ],
   // add your custom rules here
   rules: {
