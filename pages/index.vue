@@ -2,11 +2,8 @@
   <div class="container">
     <div>
       <logo />
-      {{ info }}
-      {{ userInfo }}
-      {{ userInfo.fullName }}
       <h1 class="title">
-        wordy
+        ts nuxtjs starter
       </h1>
       <h2 class="subtitle">
         Website for learning foreign words
