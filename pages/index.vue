@@ -32,12 +32,7 @@
 import Vue from 'vue'
 import Logo from '~/components/Logo.vue'
 
-interface User {
-  firstName: String;
-  secondName: String;
-  age: Number;
-  phone: Number;
-}
+import { User } from '~/types/index.ts'
 
 interface UserInfo {
   fullName: String;
