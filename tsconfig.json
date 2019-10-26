@@ -9,7 +9,9 @@
       "dom"
     ],
     "esModuleInterop": true,
+    "experimentalDecorators": true,
     "allowJs": true,
+    "importHelpers": true,
     "sourceMap": true,
     "strict": true,
     "noEmit": true,
