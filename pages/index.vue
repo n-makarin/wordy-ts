@@ -5,6 +5,7 @@
       {{ info }}
       {{ userInfo }}
       {{ userInfo.fullName }}
+      {{ storeName }}
       <h1 class="title">
         wordy
       </h1>
@@ -71,6 +72,9 @@ export default Vue.extend({
     },
     fullName (): String {
       return `${this.user.firstName} ${this.user.secondName}`
+    },
+    storeName (): string {
+      return this.$store.getters.userName
     }
   }
 })
