@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
-from wordy.main_app.serializers import UserSerializer, GroupSerializer
+from main_app.serializers import UserSerializer, GroupSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
