@@ -2,26 +2,29 @@
   <div class="api">
     <h1>Api</h1>
     <section class="api-example-list">
+      <!-- query list -->
       <div
         v-for="query in queryList"
         :key="query.id"
         class="api-example-list__item"
       >
+        <!-- request -->
         <div class="example-list-query">
+          <!-- pattern -->
           <div
             :ref="exampleQueryRefName + query.id"
             class="example-list-query__pattern"
+            :title="exampleQueryTooltip"
             @click.prevent="copyToClipboard(query.id)"
           >
             {{ query.pattern }}
           </div>
-          <div class="example-list-query__description">
-            {{ query.description }}
-          </div>
+          <!-- input -->
           <input v-model="query.input" type="text">
+          <!-- method -->
           <select
-            :id="query.id"
             v-model="query.method"
+            class="example-list-query__method"
             name="example-query"
           >
             <option
@@ -33,13 +36,20 @@
               {{ option.text }}
             </option>
           </select>
+          <!-- send button -->
           <button
+            class="example-list-query__send-button"
             :disabled="query.method === 'undefined' || !query.input"
             @click="sendRequest(query.id, query.method, query.input)"
           >
             Send
           </button>
+          <!-- description -->
+          <div class="example-list-query__description">
+            {{ query.description }}
+          </div>
         </div>
+        <!-- response -->
         <div class="example-list-response">
           {{ query.response }}
         </div>
@@ -58,12 +68,12 @@ export default Vue.extend({
     const queryList: any = []
     let queryCounter: number = 0
     const routeList: Object = routes.list
-    const descriptionList: Array<String> = routes.list
+    const descriptionList: Array<String> = routes.description
     for (const key in routeList) {
       if (routeList.hasOwnProperty(key)) {
         queryList.push({
           id: queryCounter++,
-          description: descriptionList[queryCounter],
+          description: descriptionList[queryCounter - 1],
           pattern: key,
           method: 'undefined',
           input: '',
@@ -83,7 +93,8 @@ export default Vue.extend({
         { text: 'patch', value: 'PATCH' },
         { text: 'delete', value: 'DELETE' }
       ],
-      exampleQueryRefName: 'example-query-'
+      exampleQueryRefName: 'example-query-',
+      exampleQueryTooltip: 'Click to copy to clipboard'
     }
   },
 
