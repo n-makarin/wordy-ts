@@ -18,7 +18,7 @@ server.use(middlewares)
 
 
 // Add custom routes
-server.use(jsonServer.rewriter(routes))
+server.use(jsonServer.rewriter(routes.list))
 
 server.use(router)
 
