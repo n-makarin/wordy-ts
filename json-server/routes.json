@@ -1,0 +1,19 @@
+{
+  "/login/?id=:id&password=:password": "/user/?id=:id&password=:password",
+
+
+
+  "/user/list": "/user/",
+
+  "/user/detail/?id=:id": "/user/?id=:id",
+  
+  "/user/detail/?id=:id&password=:password": "/user/?id=:id&password=:password",
+
+
+
+  "/word_set/list?user_id=:id": "/word_set?user_id=:id",
+
+  "/word_set/list?user_id=:id&target_lang=:lang": "/word_set?user_id=:id&target_lang=:lang",
+
+  "/word_set/detail/:id": "/word_set/:id"
+}
