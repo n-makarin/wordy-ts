@@ -1,19 +1,29 @@
 {
-  "/login/?id=:id&password=:password": "/user/?id=:id&password=:password",
-
-
-
-  "/user/list": "/user/",
-
-  "/user/detail/?id=:id": "/user/?id=:id",
+  "list": {
+    "/login/?id=:id&password=:password": "/user/?id=:id&password=:password",
   
-  "/user/detail/?id=:id&password=:password": "/user/?id=:id&password=:password",
-
-
-
-  "/word_set/list?user_id=:id": "/word_set?user_id=:id",
-
-  "/word_set/list?user_id=:id&target_lang=:lang": "/word_set?user_id=:id&target_lang=:lang",
-
-  "/word_set/detail/:id": "/word_set/:id"
+  
+  
+    "/user/list": "/user/",
+  
+    "/user/detail/?id=:id": "/user/?id=:id",
+    
+    "/user/detail/?id=:id&password=:password": "/user/?id=:id&password=:password",
+  
+  
+  
+    "/word_set/list?user_id=:id": "/word_set?user_id=:id",
+  
+    "/word_set/list?user_id=:id&target_lang=:lang": "/word_set?user_id=:id&target_lang=:lang",
+  
+    "/word_set/detail/:id": "/word_set/:id"
+  },
+  "descriprion": [
+    "Login via user_id and password. If successful, returns object with user's data",
+    "User list",
+    "User profile detail info by user_id",
+    "User profile detail info by user_id and password",
+    "Common user's word_set list by user_id",
+    "User's word_set list by user_id"
+  ]
 }
