@@ -46,7 +46,9 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc: https://www.npmjs.com/package/@nuxtjs/style-resources
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
+    // Doc: https://www.npmjs.com/package/nuxt-clipboard2
+    'nuxt-clipboard2'
   ],
   /*
   ** Axios module configuration
