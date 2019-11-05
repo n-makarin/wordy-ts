@@ -9,8 +9,9 @@
       >
         <div class="example-list-query">
           <div
+            :ref="exampleQueryRefName + query.id"
             class="example-list-query__pattern"
-            @click.prevent="copyToClipboard"
+            @click.prevent="copyToClipboard(query.id)"
           >
             {{ query.pattern }}
           </div>
@@ -53,11 +54,11 @@ const routes: any = require('~/json-server/routes.json')
 
 export default Vue.extend({
   data () {
+    // START: queryList
     const queryList: any = []
     let queryCounter: number = 0
     const routeList: Object = routes.list
     const descriptionList: Array<String> = routes.list
-
     for (const key in routeList) {
       if (routeList.hasOwnProperty(key)) {
         queryList.push({
@@ -70,6 +71,8 @@ export default Vue.extend({
         })
       }
     }
+    // END: queryList
+
     return {
       queryList,
       methodList: [
@@ -79,16 +82,44 @@ export default Vue.extend({
         { text: 'put', value: 'PUT' },
         { text: 'patch', value: 'PATCH' },
         { text: 'delete', value: 'DELETE' }
-      ]
+      ],
+      exampleQueryRefName: 'example-query-'
     }
   },
 
   methods: {
-    sendRequest (queryId: number, method: string, query: string) {
+    /**
+     *  Send specified request, get and show response
+     */
+    sendRequest (queryId: number, method: string, query: string): void {
       console.log(queryId, method, query)
       this.queryList[queryId].response = 'some response'
     },
-    copyToClipboard () {
+    /**
+     * Copy query pattern to clipboard and show result of this operation
+     */
+    copyToClipboard (queryId: number): void {
+      const self: any = this
+      const element: any = this.$refs[this.exampleQueryRefName + queryId]
+      const text:string = element[0].textContent
+      if (!text) { return }
+      // @ts-ignore
+      this.$copyText(text.trim()).then(() => {
+        self.addAndRemoveModifier({ element, modifier: 'copy-success' })
+      }, () => {
+        self.addAndRemoveModifier({ element, modifier: 'copy-error' })
+      })
+    },
+    /**
+     * Add class name to element and remove it on some delay
+     */
+    addAndRemoveModifier (
+      { element = null, modifier = '', delay = 900 }:
+      { element?: any; modifier?: string; delay?: number } = {}): void {
+      element[0].classList.add(modifier)
+      setTimeout(function () {
+        element[0].classList.remove(modifier)
+      }, delay)
     }
   }
 })
