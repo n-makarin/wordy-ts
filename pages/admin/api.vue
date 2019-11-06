@@ -1,15 +1,20 @@
 <template>
   <div class="api">
     <h1>Api</h1>
+    <!-- TODO: add table of contents -->
     <section class="api-example-list">
       <!-- query list -->
       <div
         v-for="query in queryList"
         :key="query.id"
-        class="api-example-list__item"
+        class="api-example-list__item example-list-item"
       >
+        <!-- description -->
+        <div class="example-list-item__description">
+          {{ query.description }}
+        </div>
         <!-- request -->
-        <div class="example-list-query">
+        <div class="example-list-item__query example-list-query">
           <!-- pattern -->
           <div
             :ref="exampleQueryRefName + query.id"
@@ -19,43 +24,51 @@
           >
             {{ query.pattern }}
           </div>
-          <!-- input -->
-          <input v-model="query.input" type="text">
-          <!-- method -->
-          <select
-            v-model="query.method"
-            class="example-list-query__method"
-            name="example-query"
-          >
-            <option
-              v-for="(option, key) in methodList"
-              :key="key"
-              :value="option.value"
-              :disabled="option.disabled"
+          <div class="example-list-query__wrapper">
+            <!-- method -->
+            <select
+              v-model="query.method"
+              class="example-list-query__method"
+              name="example-query"
             >
-              {{ option.text }}
-            </option>
-          </select>
+              <option
+                v-for="(option, key) in methodList"
+                :key="key"
+                :value="option.value"
+                :disabled="option.disabled"
+              >
+                {{ option.text }}
+              </option>
+            </select>
+            <!-- input -->
+            <input v-model="query.input" class="example-list-query__input" type="text">
+          </div>
           <!-- payload -->
           <textarea
             v-model="query.payload"
             class="example-list-query__payload"
           />
-          <!-- send button -->
-          <button
-            class="example-list-query__send-button"
-            :disabled="query.method === 'undefined' || !query.input"
-            @click="sendRequest(query.id)"
-          >
-            Send
-          </button>
-          <!-- description -->
-          <div class="example-list-query__description">
-            {{ query.description }}
+          <div>
+            <!-- send button -->
+            <button
+              class="example-list-query__button example-list-query__button_send"
+              :disabled="query.method === 'undefined' || !query.input"
+              @click="sendRequest(query.id)"
+            >
+              Send
+            </button>
+            <!-- reset button -->
+            <button
+              class="example-list-query__button example-list-query__button_reset"
+              :disabled="query.method === 'undefined' || !query.input"
+              @click="resetQueryFields(query.id)"
+            >
+              Reset
+            </button>
           </div>
         </div>
         <!-- response -->
-        <div class="example-list-response">
+        <div class="example-list-item__response">
           {{ query.response }}
         </div>
       </div>
@@ -81,7 +94,7 @@ export default Vue.extend({
           description: descriptionList[queryCounter - 1],
           pattern: key,
           method: 'undefined',
-          input: '',
+          input: key,
           payload: null,
           response: null
         })
@@ -100,7 +113,7 @@ export default Vue.extend({
         { text: 'delete', value: 'DELETE' }
       ],
       exampleQueryRefName: 'example-query-',
-      exampleQueryTooltip: 'Click to copy to clipboard'
+      exampleQueryTooltip: 'Copy to clipboard'
     }
   },
 
@@ -112,7 +125,12 @@ export default Vue.extend({
       const queryItem = this.queryList[queryId]
       const method: string = queryItem.method
       const query: string = queryItem.input
-      const payload: any = JSON.parse(queryItem.payload)
+      let payload: any = null
+      try {
+        payload = JSON.parse(queryItem.payload)
+      } catch (error) {
+        console.log(error)
+      }
       console.log(`queryId: ${queryId}, method: ${method}, query: ${query}`)
       // @ts-ignore
       await this.$sendRequest({
@@ -153,10 +171,119 @@ export default Vue.extend({
       setTimeout(function () {
         element[0].classList.remove(modifier)
       }, delay)
+    },
+    /**
+     *
+     */
+    resetQueryFields (queryId: number): void {
+      const queryItem = this.queryList[queryId]
+      for (const key in queryItem) {
+        if (queryItem.hasOwnProperty(key)) {
+          if (['method', 'input', 'payload', 'response'].includes(key)) {
+            queryItem[key] = null
+          }
+        }
+      }
+      this.queryList[queryId] = queryItem
     }
   }
 })
 </script>
 
 <style lang="scss">
+$gray: #d3d3d3;
+$green: #00c58e;
+$red: #f56565;
+$inner-padding: 3px 4px;
+.api {
+  padding: 10px 20px;
+  h1 {
+    margin-bottom: 20px;
+  }
+}
+.example-list-item {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  &:last-child {
+    border-bottom: none;
+  }
+  textarea, input, select {
+    border: 1px solid $gray;
+  }
+  &__description {
+    width: 100%;
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  &__query {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 39.5%;
+    margin-right: 10px;
+    flex-grow: 0;
+  }
+  &__response {
+    border: 1px solid $gray;
+    padding: 10px;
+    overflow: auto;
+    max-height: 300px;
+    max-width: 59.5%;
+    flex-grow: 1;
+  }
+}
+.example-list-query {
+  border: 1px solid $gray;
+  padding: 10px;
+  &__wrapper {
+    margin-bottom: 10px;
+  }
+  &__pattern {
+    margin-bottom: 10px;
+    transition: color .2s;
+    &.copy-success {
+      color: $green;
+    }
+    &.copy-error {
+      color: $red;
+    }
+  }
+  &__method {
+    padding: 2px 4px;
+  }
+  &__input {
+    padding: $inner-padding;
+    min-width: 400px;
+  }
+  &__payload {
+    min-width: 482px;
+    min-height: 60px;
+    max-width: 100%;
+    margin-bottom: 10px;
+    padding: $inner-padding;
+    z-index: 2;
+  }
+  &__button {
+    padding: 4px 10px;
+    border-radius: 3px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    &:disabled {
+      cursor: auto;
+      background: $gray;
+    }
+    &:first-child {
+      margin-right: 5px;
+    }
+    &_send {
+      background: $green;
+    }
+    &_reset {
+      background: $red;
+    }
+  }
+}
 </style>
