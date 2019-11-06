@@ -102,9 +102,21 @@ export default Vue.extend({
     /**
      *  Send specified request, get and show response
      */
-    sendRequest (queryId: number, method: string, query: string): void {
+    async sendRequest (queryId: number, method: string, query: string): Promise<any> {
       console.log(queryId, method, query)
-      this.queryList[queryId].response = 'some response'
+      // @ts-ignore
+      await this.$sendRequest({
+        method,
+        url: query,
+        data: null
+      })
+        .catch((err: any) => {
+          this.queryList[queryId].response = `Request error. ${err}`
+        })
+        .then((response: any) => {
+          if (!response || !response.data) { return null }
+          this.queryList[queryId].response = response.data
+        })
     },
     /**
      * Copy query pattern to clipboard and show result of this operation
