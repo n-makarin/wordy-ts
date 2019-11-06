@@ -189,7 +189,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $gray: #d3d3d3;
 $green: #00c58e;
 $red: #f56565;
