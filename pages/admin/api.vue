@@ -36,11 +36,16 @@
               {{ option.text }}
             </option>
           </select>
+          <!-- payload -->
+          <textarea
+            v-model="query.payload"
+            class="example-list-query__payload"
+          />
           <!-- send button -->
           <button
             class="example-list-query__send-button"
             :disabled="query.method === 'undefined' || !query.input"
-            @click="sendRequest(query.id, query.method, query.input)"
+            @click="sendRequest(query.id)"
           >
             Send
           </button>
@@ -77,6 +82,7 @@ export default Vue.extend({
           pattern: key,
           method: 'undefined',
           input: '',
+          payload: null,
           response: null
         })
       }
@@ -102,13 +108,17 @@ export default Vue.extend({
     /**
      *  Send specified request, get and show response
      */
-    async sendRequest (queryId: number, method: string, query: string): Promise<any> {
-      console.log(queryId, method, query)
+    async sendRequest (queryId: number): Promise<any> {
+      const queryItem = this.queryList[queryId]
+      const method: string = queryItem.method
+      const query: string = queryItem.input
+      const payload: any = JSON.parse(queryItem.payload)
+      console.log(`queryId: ${queryId}, method: ${method}, query: ${query}`)
       // @ts-ignore
       await this.$sendRequest({
         method,
         url: query,
-        data: null
+        data: payload
       })
         .catch((err: any) => {
           this.queryList[queryId].response = `Request error. ${err}`
