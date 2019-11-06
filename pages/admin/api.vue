@@ -9,67 +9,70 @@
         :key="query.id"
         class="api-example-list__item example-list-item"
       >
-        <!-- description -->
-        <div class="example-list-item__description">
-          {{ query.description }}
+        <!-- pattern -->
+        <div
+          :ref="exampleQueryRefName + query.id"
+          class="example-list-query__pattern"
+          :title="exampleQueryTooltip"
+          @click.prevent="copyToClipboard(query.id)"
+        >
+          {{ query.pattern }}
         </div>
-        <!-- request -->
-        <div class="example-list-item__query example-list-query">
-          <!-- pattern -->
-          <div
-            :ref="exampleQueryRefName + query.id"
-            class="example-list-query__pattern"
-            :title="exampleQueryTooltip"
-            @click.prevent="copyToClipboard(query.id)"
-          >
-            {{ query.pattern }}
-          </div>
-          <div class="example-list-query__wrapper">
-            <!-- method -->
-            <select
-              v-model="query.method"
-              class="example-list-query__method"
-              name="example-query"
-            >
-              <option
-                v-for="(option, key) in methodList"
-                :key="key"
-                :value="option.value"
-                :disabled="option.disabled"
+        <div class="flex-wrapper">
+          <!-- request -->
+          <div class="example-list-item__query example-list-query">
+            <div class="example-list-query__wrapper">
+              <!-- method -->
+              <select
+                v-model="query.method"
+                class="example-list-query__method"
+                name="example-query"
               >
-                {{ option.text }}
-              </option>
-            </select>
-            <!-- input -->
-            <input v-model="query.input" class="example-list-query__input" type="text">
+                <option
+                  v-for="(option, key) in methodList"
+                  :key="key"
+                  :value="option.value"
+                  :disabled="option.disabled"
+                >
+                  {{ option.text }}
+                </option>
+              </select>
+              <!-- input -->
+              <input
+                v-model="query.input"
+                class="example-list-query__input"
+                type="text"
+                :title="query.description"
+              >
+            </div>
+            <!-- payload -->
+            <textarea
+              v-model="query.payload"
+              class="example-list-query__payload"
+            />
+            <div>
+              <!-- send button -->
+              <button
+                class="example-list-query__button example-list-query__button_send"
+                :disabled="query.method === 'undefined' || !query.input"
+                @click="sendRequest(query.id)"
+              >
+                Send
+              </button>
+              <!-- reset button -->
+              <button
+                class="example-list-query__button example-list-query__button_reset"
+                :disabled="query.method === 'undefined' || !query.input"
+                @click="resetQueryFields(query.id)"
+              >
+                Reset
+              </button>
+            </div>
           </div>
-          <!-- payload -->
-          <textarea
-            v-model="query.payload"
-            class="example-list-query__payload"
-          />
-          <div>
-            <!-- send button -->
-            <button
-              class="example-list-query__button example-list-query__button_send"
-              :disabled="query.method === 'undefined' || !query.input"
-              @click="sendRequest(query.id)"
-            >
-              Send
-            </button>
-            <!-- reset button -->
-            <button
-              class="example-list-query__button example-list-query__button_reset"
-              :disabled="query.method === 'undefined' || !query.input"
-              @click="resetQueryFields(query.id)"
-            >
-              Reset
-            </button>
+          <!-- response -->
+          <div class="example-list-item__response">
+            {{ query.response }}
           </div>
-        </div>
-        <!-- response -->
-        <div class="example-list-item__response">
-          {{ query.response }}
         </div>
       </div>
     </section>
@@ -177,13 +180,9 @@ export default Vue.extend({
      */
     resetQueryFields (queryId: number): void {
       const queryItem = this.queryList[queryId]
-      for (const key in queryItem) {
-        if (queryItem.hasOwnProperty(key)) {
-          if (['method', 'input', 'payload', 'response'].includes(key)) {
-            queryItem[key] = null
-          }
-        }
-      }
+      queryItem.payload = null
+      queryItem.response = null
+      queryItem.method = 'undefined'
       this.queryList[queryId] = queryItem
     }
   }
@@ -200,10 +199,11 @@ $inner-padding: 3px 4px;
   h1 {
     margin-bottom: 20px;
   }
+  .flex-wrapper {
+    display: flex;
+  }
 }
 .example-list-item {
-  display: flex;
-  flex-wrap: wrap;
   margin-bottom: 20px;
   padding-bottom: 20px;
   &:last-child {
@@ -212,25 +212,19 @@ $inner-padding: 3px 4px;
   textarea, input, select {
     border: 1px solid $gray;
   }
-  &__description {
-    width: 100%;
-    font-size: 18px;
-    margin-bottom: 5px;
-  }
   &__query {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 39.5%;
     margin-right: 10px;
     flex-grow: 0;
+    max-width: 70%;
   }
   &__response {
     border: 1px solid $gray;
     padding: 10px;
     overflow: auto;
     max-height: 300px;
-    max-width: 59.5%;
     flex-grow: 1;
   }
 }
@@ -238,10 +232,13 @@ $inner-padding: 3px 4px;
   border: 1px solid $gray;
   padding: 10px;
   &__wrapper {
+    display: flex;
+    width: 100%;
     margin-bottom: 10px;
   }
   &__pattern {
     margin-bottom: 10px;
+    font-weight: 600;
     transition: color .2s;
     &.copy-success {
       color: $green;
@@ -252,14 +249,16 @@ $inner-padding: 3px 4px;
   }
   &__method {
     padding: 2px 4px;
+    margin-right: 5px;
   }
   &__input {
+    width: 100%;
     padding: $inner-padding;
     min-width: 400px;
   }
   &__payload {
     min-width: 482px;
-    min-height: 60px;
+    min-height: 80px;
     max-width: 100%;
     margin-bottom: 10px;
     padding: $inner-padding;
