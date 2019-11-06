@@ -168,7 +168,7 @@ export default Vue.extend({
      * Add class name to element and remove it on some delay
      */
     addAndRemoveModifier (
-      { element = null, modifier = '', delay = 900 }:
+      { element = null, modifier = '', delay = 600 }:
       { element?: any; modifier?: string; delay?: number } = {}): void {
       element[0].classList.add(modifier)
       setTimeout(function () {
@@ -237,9 +237,10 @@ $inner-padding: 3px 4px;
     margin-bottom: 10px;
   }
   &__pattern {
+    display: inline-block;
     margin-bottom: 10px;
     font-weight: 600;
-    transition: color .2s;
+    transition: color .2s, background .2s;
     &.copy-success {
       color: $green;
     }
