@@ -1,3 +1,4 @@
+import { endpoint } from '~/app-config.ts'
 export default ({ app, store, redirect }: any, inject: any): any => {
   inject('sendRequest', ({
     method,
@@ -6,7 +7,6 @@ export default ({ app, store, redirect }: any, inject: any): any => {
     data,
     ...options
   }: any) => {
-    const endpoint: string = 'http://127.0.0.1:8000'
     const headers: string = ''
     return app.$axios({
       method,
