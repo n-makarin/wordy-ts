@@ -2,10 +2,6 @@
   <div class="container">
     <div>
       <logo />
-      {{ info }}
-      {{ userInfo }}
-      {{ userInfo.fullName }}
-      {{ storeName }}
       <h1 class="title">
         wordy
       </h1>
@@ -36,46 +32,15 @@
 import Vue from 'vue'
 import Logo from '~/components/Logo.vue'
 
-import { User } from '~/types/index.ts'
-
-interface UserInfo {
-  fullName: String;
-  age: Number;
-  phone: Number;
-}
-
 export default Vue.extend({
   components: {
     Logo
   },
   data () {
-    const user: User = {
-      firstName: 'John',
-      secondName: 'Dhoe',
-      age: 27,
-      phone: 5569
-    }
     return {
-      user
     }
   },
   computed: {
-    info (): String {
-      return `${this.user.firstName} ${this.user.age}`
-    },
-    userInfo (): UserInfo {
-      return {
-        fullName: this.fullName,
-        age: this.user.age,
-        phone: this.user.phone
-      }
-    },
-    fullName (): String {
-      return `${this.user.firstName} ${this.user.secondName}`
-    },
-    storeName (): string {
-      return this.$store.getters.userName
-    }
   }
 })
 </script>
