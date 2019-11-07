@@ -1,6 +1,6 @@
 {
   "list": {
-    "/login/?id=:id&password=:password": "/user/?id=:id&password=:password",
+    "/login/?login=:login&password=:password": "/user/?login=:login&password=:password",
   
     "/user/list": "/user/",
     "/user/detail/:id": "/user/:id",
