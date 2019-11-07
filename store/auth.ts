@@ -1,9 +1,11 @@
+import { cookies } from '~/store/config.ts'
+
 export const state = () => ({
   user: null
 })
 
 export const mutations = {
-  SET_AUTH_USER (state: any, user: any) {
+  SET_USER (state: any, user: any) {
     state.user = user
   }
 }
@@ -26,11 +28,10 @@ export const actions = {
       .then((response: any) => {
         if (!response || !response.data || response.data.length === 0) { return }
         const user: any = response.data[0]
-        commit('SET_AUTH_USER', user)
+        commit('SET_USER', user)
         // @ts-ignore
-        this.app.$cookies.set('authUser', user, {
-          path: '/authUser',
-          maxAge: 60 * 60 * 24 * 7
+        this.app.$cookies.set(cookies.authUser.name, user, {
+          maxAge: cookies.authUser.maxAge
         })
       })
   },
@@ -38,11 +39,9 @@ export const actions = {
    * 
    */
   logout ({ commit = Function }): void {
-    commit('SET_AUTH_USER', '')
+    commit('SET_USER', '')
     // @ts-ignore
-    this.app.$cookies.remove('authUser', {
-      path: '/authUser'
-    })
+    this.app.$cookies.remove(cookies.authUser.name)
   }
 }
 
