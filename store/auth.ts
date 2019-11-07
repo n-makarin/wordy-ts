@@ -47,7 +47,5 @@ export const actions = {
 }
 
 export const getters = {
-  user(state: any) {
-    return state.user
-  } 
+  user: (state: any) => state.user
 }
