@@ -3,10 +3,10 @@
     <h1>Sign in</h1>
     <form class="login-form" @submit.prevent="signIn">
       <label for="login">{{ login.label }}</label>
-      <input id="login" v-model="login.data" type="text" required>
+      <input id="login" v-model="login.value" type="text" required>
 
       <label for="password">{{ password.label }}</label>
-      <input id="password" v-model="password.data" type="password" required>
+      <input id="password" v-model="password.value" type="password" required>
 
       <button>Sign in</button>
       <div>
@@ -28,11 +28,11 @@ export default Vue.extend({
   data () {
     return {
       login: {
-        data: '',
+        value: '',
         label: 'Login or email address'
       },
       password: {
-        data: '',
+        value: '',
         label: 'Password'
       }
     }
@@ -45,11 +45,10 @@ export default Vue.extend({
   methods: {
     async signIn (): Promise<void> {
       await this.$store.dispatch('auth/login', {
-        login: this.login.data, password: this.password.data
+        login: this.login.value, password: this.password.value
       })
-      if (this.authorized) {
-        this.$router.push('/')
-      }
+      if (!this.authorized) { return }
+      this.$router.push('/')
     }
   }
 })
