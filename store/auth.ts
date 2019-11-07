@@ -1,10 +1,10 @@
 export const state = {
-  authUser: null
+  user: null
 }
 
 export const mutations = {
   SET_AUTH_USER (state: any, user: any) {
-    state.authUser = user
+    state.user = user
   }
 }
 
@@ -16,13 +16,12 @@ export const actions = {
     { login = '', password = '' }:
     { login?: string; password?: string; } = {}): Promise<any> {
     // @ts-ignore
-    this.app.$sendRequest({
+    await this.app.$sendRequest({
       method: 'GET',
       url: `/login/?login=${login}&password=${password}`
     })
       .catch((err: any) => {
         console.log(err)
-        return false
       })
       .then((response: any) => {
         if (!response || !response.data || response.data.length === 0) { return }
@@ -33,7 +32,6 @@ export const actions = {
           path: '/authUser',
           maxAge: 60 * 60 * 24 * 7
         })
-        return true
       })
   },
   /**
@@ -41,11 +39,15 @@ export const actions = {
    */
   logout ({ commit = Function }): void {
     commit('SET_AUTH_USER', '')
+    // @ts-ignore
+    this.app.$cookies.remove('authUser', {
+      path: '/authUser'
+    })
   }
 }
 
 export const getters = {
-  authUser(state: any) {
-    return state.authUser
+  user(state: any) {
+    return state.user
   } 
 }
