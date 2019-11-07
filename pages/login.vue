@@ -9,14 +9,22 @@
       <input id="password" v-model="password.data" type="password" required>
 
       <button>Sign in</button>
+      <div>
+        <span>Don't have an account?</span>
+        <join />
+      </div>
     </form>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import Join from '~/components/layout/join.vue'
 
 export default Vue.extend({
+  components: {
+    Join
+  },
   data () {
     return {
       login: {
