@@ -8,7 +8,7 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  layout: 'empty',
+  layout: 'admin',
   data () {
     return {
       auth: null
