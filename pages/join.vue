@@ -56,6 +56,24 @@ export default Vue.extend({
           label: 'Target language',
           tooltip: 'You can change this at any time',
           required: true
+        },
+        name: {
+          value: '',
+          label: 'Name',
+          tooltip: '',
+          required: false
+        },
+        surname: {
+          value: '',
+          label: 'Surname',
+          tooltip: '',
+          required: false
+        },
+        dateOfBirth: {
+          value: '',
+          label: 'Date of birth',
+          tooltip: '',
+          required: false
         }
       }
     }
@@ -76,7 +94,7 @@ export default Vue.extend({
         name: '',
         surname: '',
         date_of_birth: null,
-        date_of_reg: null
+        date_of_reg: Date.now()
       }
       for (const key in this.fieldList) {
         if (this.fieldList.hasOwnProperty(key)) {
