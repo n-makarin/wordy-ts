@@ -1,0 +1,1 @@
+export { cookies } from '~/store/config/cookies.ts';
