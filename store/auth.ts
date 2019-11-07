@@ -12,7 +12,8 @@ export const mutations = {
 
 export const actions = {
   /**
-   * 
+   * Verify user's login and password.
+   * Set user to store and cookies 
    */
   async login ({ commit = Function }, 
     { login = '', password = '' }:
@@ -36,7 +37,7 @@ export const actions = {
       })
   },
   /**
-   * 
+   * Remove user from store and cookies
    */
   logout ({ commit = Function }): void {
     commit('SET_USER', '')
