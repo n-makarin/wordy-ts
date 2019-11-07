@@ -30,12 +30,17 @@ export default Vue.extend({
       }
     }
   },
+  computed: {
+    authorized () {
+      return this.$store.getters['auth/user']
+    }
+  },
   methods: {
-    signIn (): void {
-      const authenticated: any = this.$store.dispatch('auth/login', {
+    async signIn (): Promise<void> {
+      await this.$store.dispatch('auth/login', {
         login: this.login.data, password: this.password.data
       })
-      if (authenticated) {
+      if (this.authorized) {
         this.$router.push('/')
       }
     }
