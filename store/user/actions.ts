@@ -1,7 +1,7 @@
 import { cookies } from '~/store/config.ts'
 
 export default {
-  async create(payload: object): Promise<void> {
+  async create({}, payload: object): Promise<void> {
     // @ts-ignore
       await this.app.$sendRequest({
         method: 'POST',
