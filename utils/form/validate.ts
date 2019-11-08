@@ -6,7 +6,7 @@ export default {
    * 
    */
   input(event: any, field: any): Types.Input {
-    const fieldLengthMax: number|null = field.length ? field.length.max : null
+    const fieldMaxLength: number|null = field.length ? field.length.max : null
     const keyCode: string = String.fromCharCode(event.keyCode);
 
     if (lettersAndNumbers.test(keyCode)) {
@@ -14,8 +14,9 @@ export default {
       if (field.error.visible) {
         this.removeErrorMessage(field)
       }
+      
       // max length limit
-      if (fieldLengthMax && field.value.length >= fieldLengthMax) {
+      if (fieldMaxLength && field.value.length >= fieldMaxLength) {
         event.preventDefault()
         return {
           needToUpdate: false,
@@ -43,18 +44,27 @@ export default {
       if (fieldList.hasOwnProperty(key)) {
         // @ts-ignore
         const field: Types.Field = fieldList[key]
+        const fieldMinLength: number|null = field.length ? field.length.min : null
   
         // if required and empty
         if (field.required && !field.value) {
+          valid = false
           field.error = {
             visible: true,
             message: 'Field is required'
           }
-          valid = false
         } else if (key === 'email' && !this.email(field.value)) {
+          valid = false
           field.error = {
             visible: true,
             message: 'Invalid email'
+          }
+        // min length limit
+        } else if (fieldMinLength && field.value.length && field.value.length < fieldMinLength) {
+          valid = false
+          field.error = {
+            visible: true,
+            message: `Minimum field length is ${fieldMinLength} characters`
           }
         } else {
           field.error = {
@@ -62,8 +72,6 @@ export default {
             message: ''
           }
         }
-        
-  
   
         // @ts-ignore
         fieldList[key] = field
