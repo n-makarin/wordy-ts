@@ -50,6 +50,15 @@ export const actions = {
     commit('SET_USER', '')
     // @ts-ignore
     this.app.$cookies.remove(cookies.authUser.name)
+  },
+  /**
+   * Prolong autharization when got user from cookies
+   */
+  prolongAuth({}, user: object): void {
+    // @ts-ignore
+    this.app.$cookies.set(cookies.authUser.name, user, {
+      maxAge: cookies.authUser.maxAge
+    })
   }
 }
 

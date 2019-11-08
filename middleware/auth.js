@@ -16,6 +16,7 @@ export class Auth {
     if (userFromCookies) {
       store.commit('auth/SET_USER', userFromCookies)
       this.userFromStore = userFromCookies
+      store.dispatch('auth/prolongAuth', userFromCookies)
     }
   }
   /**
