@@ -9,11 +9,14 @@
       <input id="password" v-model="password.value" type="password" required>
 
       <button>Sign in</button>
-      <div>
-        <span>Don't have an account?</span>
-        <join />
-      </div>
     </form>
+    <div v-if="error.visible" class="login__error">
+      {{ error.text }}
+    </div>
+    <div>
+      <span>Don't have an account?</span>
+      <join />
+    </div>
   </div>
 </template>
 
@@ -34,6 +37,10 @@ export default Vue.extend({
       password: {
         value: '',
         label: 'Password'
+      },
+      error: {
+        visible: false,
+        text: 'Invalid data (login, email or password)'
       }
     }
   },
@@ -47,7 +54,10 @@ export default Vue.extend({
       await this.$store.dispatch('auth/login', {
         identifier: this.identifier.value, password: this.password.value
       })
-      if (!this.authorized) { return }
+      if (!this.authorized) {
+        this.error.visible = true
+        return
+      }
       this.$router.push('/')
     }
   }
