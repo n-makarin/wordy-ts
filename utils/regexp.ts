@@ -1,1 +1,2 @@
 export const email: RegExp = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+export const lettersAndNumbers: RegExp = /[a-zA-Z0-9-_ ]/
