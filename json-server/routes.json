@@ -1,6 +1,7 @@
 {
   "list": {
     "/login/?login=:login&password=:password": "/user/?login=:login&password=:password",
+    "/login-email/?email=:email&password=:password": "/user/?email=:email&password=:password",
   
     "/user/list": "/user/",
     "/user/detail/:id": "/user/:id",
