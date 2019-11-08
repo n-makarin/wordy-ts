@@ -2,8 +2,8 @@
   <div class="login">
     <h1>Sign in</h1>
     <form class="login-form" @submit.prevent="signIn">
-      <label for="login">{{ login.label }}</label>
-      <input id="login" v-model="login.value" type="text" required>
+      <label for="identifier">{{ identifier.label }}</label>
+      <input id="identifier" v-model="identifier.value" type="text" required>
 
       <label for="password">{{ password.label }}</label>
       <input id="password" v-model="password.value" type="password" required>
@@ -27,7 +27,7 @@ export default Vue.extend({
   },
   data () {
     return {
-      login: {
+      identifier: {
         value: '',
         label: 'Login or email address'
       },
@@ -45,7 +45,7 @@ export default Vue.extend({
   methods: {
     async signIn (): Promise<void> {
       await this.$store.dispatch('auth/login', {
-        login: this.login.value, password: this.password.value
+        identifier: this.identifier.value, password: this.password.value
       })
       if (!this.authorized) { return }
       this.$router.push('/')

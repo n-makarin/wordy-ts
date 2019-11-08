@@ -1,4 +1,5 @@
 import { cookies } from '~/store/config.ts'
+import { email } from '~/utils/regexp'
 
 export const state = () => ({
   user: null
@@ -16,12 +17,18 @@ export const actions = {
    * Set user to store and cookies 
    */
   async login ({ commit = Function }, 
-    { login = '', password = '' }:
-    { login?: string; password?: string; } = {}): Promise<any> {
+    { identifier = '', password = '' }:
+    { identifier?: string; password?: string; } = {}): Promise<any> {
+      let url: string
+      if (email.test(identifier)) {
+        url = `/login-email/?email=${identifier}&password=${password}`
+      } else {
+        url = `/login/?login=${identifier}&password=${password}`
+      }
     // @ts-ignore
     await this.app.$sendRequest({
       method: 'GET',
-      url: `/login/?login=${login}&password=${password}`
+      url: url
     })
       .catch((err: any) => {
         console.log(err)
