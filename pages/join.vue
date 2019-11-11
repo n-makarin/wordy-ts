@@ -17,8 +17,8 @@
           :id="key"
           v-model="item.value"
           :type="key === 'password' ? 'password' : 'text'"
-          :min="item.length ? item.length.min : false"
-          :max="item.length ? item.length.max : false"
+          :min="item.range ? item.range.min : false"
+          :max="item.range ? item.range.max : false"
           @keydown="input($event, key)"
         >
         <div v-if="item.error.visible" class="join-form-item__error">
@@ -35,18 +35,18 @@
 import Vue from 'vue'
 import { User } from '~/types/index.ts'
 import validate from '~/utils/form/validate.ts'
-import * as Types from '~/types/pages/join.ts'
-import * as ValidateTypes from '~/types/utils/validate.ts'
+import * as FieldTypes from '~/types/utils/form/field.ts'
+import * as ValidateTypes from '~/types/utils/form/validate.ts'
 
 export default Vue.extend({
   data () {
-    const fieldList: Types.FieldList = {
+    const fieldList: FieldTypes.List = {
       login: {
         value: '',
         label: 'Login',
         tooltip: '',
         required: true,
-        length: {
+        range: {
           min: 4,
           max: 12
         },
@@ -60,7 +60,7 @@ export default Vue.extend({
         label: 'Email adress',
         tooltip: '',
         required: true,
-        length: {
+        range: {
           min: 4,
           max: 20
         },
@@ -74,7 +74,7 @@ export default Vue.extend({
         label: 'Password',
         tooltip: '',
         required: true,
-        length: {
+        range: {
           min: 6,
           max: 20
         },
@@ -108,7 +108,7 @@ export default Vue.extend({
         label: 'Name',
         tooltip: '',
         required: false,
-        length: {
+        range: {
           min: 2,
           max: 20
         },
@@ -122,7 +122,7 @@ export default Vue.extend({
         label: 'Surname',
         tooltip: '',
         required: false,
-        length: {
+        range: {
           min: 2,
           max: 20
         },
@@ -154,9 +154,9 @@ export default Vue.extend({
   methods: {
     async createAccount (): Promise<void> {
       // @ts-ignore
-      const validateResult: Types.ValidateResult = validate.final(this.fieldList, Types)
+      const validateResult: ValidateTypes.Result = validate.finalCheck(this.fieldList, FieldTypes)
       if (!validateResult.valid) {
-        this.fieldList = validateResult.errorsComplemented
+        this.fieldList = validateResult.dataWithErrors
         return
       }
       const payload: User = {
@@ -181,7 +181,7 @@ export default Vue.extend({
       this.$router.push('/')
     },
     input (event: any, fieldId: string): void {
-      const validateResult: ValidateTypes.Input = validate.input(event, this.fieldList[fieldId])
+      const validateResult: ValidateTypes.InputFuncResult = validate.onInput(this.fieldList[fieldId], event)
       if (!validateResult.needToUpdate) { return }
       this.fieldList[fieldId] = validateResult.field
     }
