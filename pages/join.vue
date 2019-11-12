@@ -62,7 +62,7 @@ export default Vue.extend({
         required: true,
         range: {
           min: 4,
-          max: 20
+          max: 30
         },
         error: {
           visible: false,
@@ -76,7 +76,7 @@ export default Vue.extend({
         required: true,
         range: {
           min: 6,
-          max: 20
+          max: 30
         },
         error: {
           visible: false,
