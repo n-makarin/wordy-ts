@@ -154,7 +154,7 @@ export default Vue.extend({
   methods: {
     async createAccount (): Promise<void> {
       // @ts-ignore
-      const validateResult: ValidateTypes.Result = validate.finalCheck(this.fieldList, FieldTypes)
+      const validateResult: ValidateTypes.Result = await validate.finalCheck(this.fieldList, FieldTypes)
       if (!validateResult.valid) {
         this.fieldList = validateResult.dataWithErrors
         return
