@@ -44,10 +44,13 @@ export interface FieldOnInput extends Field {
 
 export interface FinalCheck extends Field {
   valid: boolean;
-  validate(fieldList: FieldTypes.List): FinalCheckResult
+  validate(fieldList: FieldTypes.List): Promise<FinalCheckResult>
   required(): void
-  email(key: string): void
   minLength(): void
   maxLength(): void
+  email(key: string): Promise<void>
+  login(key: string): Promise<void>
+  hasError(): boolean
   needToValidate(): boolean
+  isUniqueField(field: string, value: string): Promise<boolean>
 }
