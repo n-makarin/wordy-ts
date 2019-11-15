@@ -3,11 +3,11 @@
     <h1>Profile</h1>
     <preview
       v-if="viewType === viewTypeList.preview"
-      :user="user"
+      :user="fieldList"
     />
     <edit
       v-else
-      :user="user"
+      :user="fieldList"
       @change="setEditData"
     />
     <button @click="toggleViewType">
@@ -21,6 +21,7 @@ import Vue from 'vue'
 import Preview from '~/components/pages/profile/preview.vue'
 import Edit from '~/components/pages/profile/edit.vue'
 import validate from '~/utils/form/validate.ts'
+import FieldList from '~/components/pages/profile/field-list.json'
 
 import * as FieldTypes from '~/types/utils/form/field.ts'
 import * as ValidateTypes from '~/types/utils/form/validate.ts'
@@ -31,19 +32,34 @@ export default Vue.extend({
     Edit
   },
   data () {
-    const editData: FieldTypes.List = {}
     return {
       viewTypeList: {
         preview: 'preview',
         edit: 'edit'
       },
-      viewType: 'preview',
-      editData
+      viewType: 'preview'
     }
   },
   computed: {
     user (): any {
       return this.$store.getters['auth/user']
+    },
+    fieldList () {
+      const fieldList: FieldTypes.List = FieldList
+      for (const key in fieldList) {
+        if (fieldList.hasOwnProperty(key)) {
+          fieldList[key].value = this.user[key]
+        }
+      }
+      return fieldList
+    },
+    editData: {
+      get () {
+        // @ts-ignore
+        return this.fieldList
+      },
+      set () {
+      }
     },
     buttonText (): string {
       if (this.viewType === this.viewTypeList.preview) {
@@ -67,8 +83,7 @@ export default Vue.extend({
       this.editData = fieldList
     },
     async save (): Promise<boolean> {
-      // @ts-ignore
-      const validateResult: ValidateTypes.Result = await validate.finalCheck(
+      const validateResult: ValidateTypes.FinalCheckResult = await validate.finalCheck(
         this.editData,
         { compare: { email: true, login: true } },
         { login: this.editData.login.value, email: this.editData.email.value }
