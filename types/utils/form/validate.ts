@@ -42,9 +42,22 @@ export interface FieldOnInput extends Field {
   hideError(): void;
 }
 
+export interface Config {
+  compare: {
+    login: boolean;
+    email: boolean;
+  }
+}
+export interface PrevData {
+  login: any;
+  email: any;
+}
+
 export interface FinalCheck extends Field {
   valid: boolean;
-  validate(fieldList: FieldTypes.List): Promise<FinalCheckResult>
+  config: Config;
+  prevData: PrevData;
+  validate(fieldList: FieldTypes.List, config: Config, prevData: PrevData): Promise<FinalCheckResult>
   required(): void
   minLength(): void
   maxLength(): void
