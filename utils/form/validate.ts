@@ -8,8 +8,12 @@ export default {
     const init = new FieldOnInput(field)
     return init.input(event)
   },
-  async finalCheck(fieldList: FieldTypes.List): Promise<ValidateTypes.FinalCheckResult> {
+  async finalCheck(
+      fieldList: FieldTypes.List, 
+      config: ValidateTypes.Config,
+      prevData: ValidateTypes.PrevData
+    ): Promise<ValidateTypes.FinalCheckResult> {
     const init = new FinalCheck()
-    return await init.validate(fieldList)
+    return await init.validate(fieldList, config, prevData)
   }
 }
