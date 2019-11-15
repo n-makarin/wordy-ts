@@ -1,29 +1,12 @@
 <template>
   <div class="preview">
     <div class="user-info">
-      <div class="user-info__login">
-        {{ user.login }}
-      </div>
-      <div class="user-info__name">
-        {{ user.name }}
-      </div>
-      <div class="user-info__surname">
-        {{ user.surname }}
-      </div>
-      <div class="user-info__email">
-        {{ user.email }}
-      </div>
-      <div class="user-info__date-of-birth">
-        {{ user.date_of_birth }}
-      </div>
-      <div class="user-info__date-of-reg">
-        {{ user.date_of_reg }}
-      </div>
-      <div class="user-info__current-target-lang">
-        {{ user.current_target_lang }}
-      </div>
-      <div v-if="user.admin" class="user-info__is-admin">
-        {{ user.admin }}
+      <div
+        v-for="(item, key) in user"
+        :key="key"
+        class="user-info__item"
+      >
+        {{ item.value }}
       </div>
     </div>
   </div>
