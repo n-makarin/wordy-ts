@@ -1,0 +1,78 @@
+{
+  "login": {
+    "value": "",
+    "required": true,
+    "range": {
+      "min": 4,
+      "max": 12
+    },
+    "error": {
+      "visible": false,
+      "message": ""
+    }
+  },
+  "email": {
+    "value": "",
+    "required": true,
+    "range": {
+      "min": 4,
+      "max": 30
+    },
+    "error": {
+      "visible": false,
+      "message": ""
+    }
+  },
+  "password": {
+    "value": "",
+    "required": true,
+    "range": {
+      "min": 6,
+      "max": 30
+    },
+    "error": {
+      "visible": false,
+      "message": ""
+    }
+  },
+  "current_target_lang": {
+    "value": "",
+    "required": true,
+    "error": {
+      "visible": false,
+      "message": ""
+    }
+  },
+  "name": {
+    "value": "",
+    "required": false,
+    "range": {
+      "min": 2,
+      "max": 20
+    },
+    "error": {
+      "visible": false,
+      "message": ""
+    }
+  },
+  "surname": {
+    "value": "",
+    "required": false,
+    "range": {
+      "min": 2,
+      "max": 20
+    },
+    "error": {
+      "visible": false,
+      "message": ""
+    }
+  },
+  "date_of_birth": {
+    "value": "",
+    "required": false,
+    "error": {
+      "visible": false,
+      "message": ""
+    }
+  }
+}
