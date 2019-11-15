@@ -7,10 +7,29 @@ import { endpoint } from '~/app-config.ts'
 
 export class FinalCheck extends Field implements ValidateTypes.FinalCheck {
   valid = true
+  config = {
+    compare: {
+      login: false,
+      email: false
+    }
+  }
+  prevData = {
+    login: {},
+    email: {}
+  }
   constructor() {
     super(emptyField);
   }
-  async validate (fieldList: FieldTypes.List): Promise<ValidateTypes.FinalCheckResult> {
+  async validate (
+      fieldList: FieldTypes.List, 
+      config: ValidateTypes.Config, 
+      prevData: ValidateTypes.PrevData
+    ): Promise<ValidateTypes.FinalCheckResult> {
+
+    // set config and prevData
+    this.config = config
+    this.prevData = prevData
+
     for (const key in fieldList) {
       if (fieldList.hasOwnProperty(key)) {
         this.field = fieldList[key]
@@ -53,6 +72,7 @@ export class FinalCheck extends Field implements ValidateTypes.FinalCheck {
       }
       return
     }
+    if (this.config.compare.email && this.prevData.email === this.field.value) { return }
     const isUnique: boolean = await this.isUniqueField(key, this.field.value)
     if (!isUnique) {
       this.valid = false
@@ -65,6 +85,7 @@ export class FinalCheck extends Field implements ValidateTypes.FinalCheck {
   async login (key: string): Promise<void> {
     if (key !== 'login') { return }
     if (this.hasError()) { return }
+    if (this.config.compare.login && this.prevData.login === this.field.value) { return }
     const isUnique: boolean = await this.isUniqueField(key, this.field.value)
     if (!isUnique) {
       this.valid = false
@@ -103,6 +124,10 @@ export class FinalCheck extends Field implements ValidateTypes.FinalCheck {
     return true
   }
   async isUniqueField (field: string, value: string): Promise<boolean> {
+    // @ts-ignore
+    if (this.prevData && this.prevData[field] === value) {
+      return true
+    }
     const response: boolean = await axios({
       method: 'GET',
       url: `${endpoint}/user/detail/?${field}=${value}`
