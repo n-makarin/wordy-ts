@@ -1,8 +1,8 @@
 export interface Field {
   value: string;
-  label: string;
   required: boolean;
   error: Error;
+  label?: string;
   tooltip?: string;
   range?: Range;
 }
